@@ -1,10 +1,13 @@
 package com.eric.wechat;
 
 import com.eric.wechat.service.WeChatService;
+import com.eric.wechat.service.WeChatServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.io.File;
 
 import static org.mockito.Mockito.when;
 
@@ -28,4 +31,17 @@ public class WeChatServiceTest {
         String uuid = weChatService.getUUID();
         Assert.assertEquals(uuid, "test");
     }
+
+    @Test
+    public void testGetQrCodeImage(){
+        WeChatService realWeChatService = new WeChatServiceImpl();
+        String uuid = realWeChatService.getUUID();
+        File qrCodeImage = new File("testQrCode.jpg");
+        if(qrCodeImage.exists()){
+            qrCodeImage.delete();
+        }
+        realWeChatService.getQrCodeImage(qrCodeImage,uuid);
+
+    }
+
 }

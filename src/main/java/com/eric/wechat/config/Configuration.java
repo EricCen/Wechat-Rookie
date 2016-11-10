@@ -23,7 +23,7 @@ public class Configuration {
     }
 
     public void load(String location){
-        InputStream is = Configuration.class.getResourceAsStream(location);
+        InputStream is = Configuration.class.getClassLoader().getResourceAsStream(location);
         try{
             properties.load(is);
         } catch (IOException e) {

@@ -9,6 +9,7 @@ public class Application {
     public static void main(String[] args){
         Configuration configuration = Configuration.getInstance();
         configuration.load("config.properties");
-
+        WechatRookie wechatRookie = new WechatRookie();
+        wechatRookie.showQrCode();
     }
 }

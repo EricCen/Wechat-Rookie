@@ -5,7 +5,7 @@ import com.eric.wechat.util.Matchers;
 import com.eric.wechat.util.TimeUtils;
 import okhttp3.*;
 
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by Eric Cen on 2016/11/9.
@@ -53,5 +53,37 @@ public class WeChatServiceImpl implements WeChatService {
             throw new RuntimeException(e);
         }
         throw new RuntimeException("Fail to get UUID");
+    }
+
+    @Override
+    public void getQrCodeImage(File file, String uuid) {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("https")
+                .host("login.weixin.qq.com")
+                .addPathSegment("qrcode")
+                .addPathSegment(uuid)
+                .addQueryParameter("t", "webwx")
+                .addQueryParameter("_", String.valueOf(TimeUtils.getCurrentUnixTime()))
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response;
+        try {
+            response = okHttpClient.newCall(request).execute();
+            InputStream is = response.body().byteStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            OutputStream os = new FileOutputStream(file);
+            int data;
+            while((data = bis.read()) > -1){
+                os.write(data);
+            }
+            os.flush();
+            os.close();
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Fail to get WeChat QrCode image.");
+        }
     }
 }
