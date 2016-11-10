@@ -34,7 +34,7 @@ public class WechatRookie {
         if(qrCodeImage != null && qrCodeImage.exists() && qrCodeImage.isFile()){
             try {
                 HttpServer qrCodeServer = HttpServer.create();
-                qrCodeServer.bind(new InetSocketAddress(8099),20);
+                qrCodeServer.bind(new InetSocketAddress("localhost",8099),20);
                 qrCodeServer.createContext("/wechatLogin", new HttpHandler() {
                     @Override
                     public void handle(HttpExchange exchange) throws IOException {
