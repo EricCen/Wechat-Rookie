@@ -15,4 +15,6 @@ public interface WeChatService {
     void wxInit(WechatMetaData wechatMetaData);
     void openStatusNotify(WechatMetaData wechatMetaData);
     WechatContact getContact(WechatMetaData wechatMetaData);
+    void login(WechatMetaData wechatMetaData);
+    void getGroup(WechatMetaData wechatMetaData, WechatContact wechatContact);
 }

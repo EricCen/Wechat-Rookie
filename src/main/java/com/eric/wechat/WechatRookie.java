@@ -95,7 +95,7 @@ public class WechatRookie {
     }
 
     public void login(){
-
+       weChatService.login(wechatMetaData);
     }
 }
 

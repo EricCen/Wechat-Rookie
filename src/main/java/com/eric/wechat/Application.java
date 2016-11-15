@@ -19,5 +19,6 @@ public class Application {
                 e.printStackTrace();
             }
         }
+        wechatRookie.start();
     }
 }
