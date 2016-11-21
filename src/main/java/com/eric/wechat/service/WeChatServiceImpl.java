@@ -304,6 +304,7 @@ public class WeChatServiceImpl implements WeChatService {
 
        try(Response response = okHttpClient.newCall(request).execute()) {
            String response_string = response.body().string();
+           //TODO Still need to set cookie
            wechatMetaData.setCookie(request.header("Cookie"));
            if (response_string == null && response_string.isEmpty()) {
                throw new RuntimeException("Fail to login Wechat");
