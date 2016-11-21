@@ -19,4 +19,15 @@ public class Constants {
             "weixin", "brandsessionholder", "weixinreminder", "wxid_novlwrv3lqwv11", "gh_22b87fa7cb3c", "officialaccounts",
             "notification_messages", "wxid_novlwrv3lqwv11", "gh_22b87fa7cb3c", "wxitil", "userexperience_alarm",
             "notification_messages");
+
+    public static final String[] SYNC_HOST = {
+            "webpush.weixin.qq.com",
+            "webpush2.weixin.qq.com",
+            "webpush.wechat.com",
+            "webpush1.wechat.com",
+            "webpush2.wechat.com",
+            "webpush1.wechatapp.com"
+    };
+
+    public static Configuration config = Configuration.getInstance();
 }

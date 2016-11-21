@@ -1,6 +1,5 @@
 package com.eric.wechat;
 
-import com.eric.wechat.config.Configuration;
 import com.eric.wechat.config.Constants;
 
 /**
@@ -8,8 +7,6 @@ import com.eric.wechat.config.Constants;
  */
 public class Application {
     public static void main(String[] args){
-        Configuration configuration = Configuration.getInstance();
-        configuration.load("config.properties");
         WechatRookie wechatRookie = new WechatRookie();
         wechatRookie.showQrCode();
         while(!Constants.HTTP_OK.equals(wechatRookie.waitForLogin())){

@@ -10,9 +10,11 @@ import java.util.Properties;
 public class Configuration {
     private Properties properties;
     private static Configuration instance = new Configuration();
+    private static final String LOCATION = "config.properties";
 
     private Configuration(){
         this.properties = new Properties();
+        load(LOCATION);
     }
 
     public static Configuration getInstance(){

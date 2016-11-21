@@ -1,5 +1,6 @@
 package com.eric.wechat.service;
 
+import com.blade.kit.json.JSONObject;
 import com.eric.wechat.model.WechatContact;
 import com.eric.wechat.model.WechatMetaData;
 
@@ -17,4 +18,8 @@ public interface WeChatService {
     WechatContact getContact(WechatMetaData wechatMetaData);
     void login(WechatMetaData wechatMetaData);
     void getGroup(WechatMetaData wechatMetaData, WechatContact wechatContact);
+    void choiceSyncLine(WechatMetaData wechatMetaData);
+    int[] syncCheck(WechatMetaData wechatMetaData);
+    JSONObject webwxsync(WechatMetaData metaData);
+    void handleMsg(WechatMetaData wechatMetaData, JSONObject data);
 }
