@@ -16,6 +16,11 @@ import okhttp3.*;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Eric Cen on 2016/11/9.
@@ -300,12 +305,22 @@ public class WeChatServiceImpl implements WeChatService {
                              .url(redirect_url)
                              .build();
 
+        URL url;
+        String cookie = null;
+        try {
+            url = new URL(redirect_url);
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            cookie = getCookie(connection);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-
-       try(Response response = okHttpClient.newCall(request).execute()) {
+        try(Response response = okHttpClient.newCall(request).execute()) {
            String response_string = response.body().string();
            //TODO Still need to set cookie
-           wechatMetaData.setCookie(request.header("Cookie"));
+           wechatMetaData.setCookie(cookie);
            if (response_string == null && response_string.isEmpty()) {
                throw new RuntimeException("Fail to login Wechat");
            }
@@ -323,6 +338,30 @@ public class WeChatServiceImpl implements WeChatService {
        } catch (IOException e) {
            e.printStackTrace();
        }
+    }
+
+    private String getCookie(HttpURLConnection connection){
+        Map<String, List<String>> resHeaders = connection.getHeaderFields();
+        StringBuffer sBuffer = new StringBuffer();
+        for (Map.Entry<String, List<String>> entry : resHeaders.entrySet()) {
+            String name = entry.getKey();
+            if (name == null)
+                continue; // http/1.1 line
+            List<String> values = entry.getValue();
+            if (name.equalsIgnoreCase("Set-Cookie")) {
+                for (String value : values) {
+                    if (value == null) {
+                        continue;
+                    }
+                    String cookie = value.substring(0, value.indexOf(";") + 1);
+                    sBuffer.append(cookie);
+                }
+            }
+        }
+        if(sBuffer.length() > 0){
+            return sBuffer.toString();
+        }
+        return sBuffer.toString();
     }
 
     @Override
@@ -463,7 +502,7 @@ public class WeChatServiceImpl implements WeChatService {
             int msgType = msg.getInt("MsgType", 0);
             String name = getUserRemarkName(msg.getString("FromUserName"));
             String content = msg.getString("Content");
-
+            LOGGER.info("Content: " + content);
             if(msgType == 51){
                 LOGGER.info("Succeed to catch Wechat initialization message");
             } else if(msgType == 1){
@@ -472,8 +511,12 @@ public class WeChatServiceImpl implements WeChatService {
                 /*} else if (msg.getString("FromUserName").equals(wechatMetaData.getUser().getString("UserName"))) {
                     continue;*/
                 } else if (msg.getString("ToUserName").indexOf("@@") != -1) {
-                    String[] peopleContent = content.split(":<br/>");
-                    LOGGER.info("|" + name + "| " + peopleContent[0] + ":\n" + peopleContent[1].replace("<br/>", "\n"));
+                    LOGGER.info("ToUserName = " + msg.getString("ToUserName"));
+                    LOGGER.info("FromUserName = " + msg.getString("FromUserName"));
+                    webwxsendmsg(wechatMetaData, "Fuck you", msg.getString("FromUserName"));
+                    LOGGER.info("×Ô¶¯»Ø¸´ " + "Fuck you");
+                   /* String[] peopleContent = content.split(":<br/>");
+                    LOGGER.info("|" + name + "| " + peopleContent[0] + ":\n" + peopleContent[1].replace("<br/>", "\n"));*/
                 } else {
                     LOGGER.info(name + ": " + content);
                    /* String ans = robot.talk(content);*/
